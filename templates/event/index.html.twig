@@ -5,5 +5,25 @@
 {% endblock %}
 
 {% block body %}
-    Liste événements
+<h1 class="my-6 text-2xl text-center">{{ incoming }} événement(s) à venir</h1>
+
+<div class="max-w-3xl mx-auto my-8 divide-y divide-gray-100">
+    {% for event in events %}
+        <div class="cursor-pointer hover:bg-gray-50">
+            <a class="block px-4 py-6" href="{{ path('app_event_show', { id: event.id }) }}">
+                <div class="flex justify-between">
+                    <h2>{{ event.name }}</h2>
+
+                    {% if event.startAt <= date() and event.endAt >= date() %}
+                        <p class="bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm">En cours</p>
+                    {% elseif event.endAt < date() %}
+                        <p class="bg-red-500 text-white px-3 py-1 rounded-lg text-sm">Passé</p>
+                    {% else %}
+                        <p class="bg-emerald-500 text-white px-3 py-1 rounded-lg text-sm">Futur</p>
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}

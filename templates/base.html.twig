@@ -36,7 +36,7 @@
                                 <a class="text-sm {{ route == 'app_home' ? 'font-bold' }}" href="{{ path('app_home') }}">Accueil</a>
                             </li>
                             <li>
-                                <a class="text-sm {{ route == 'app_event' ? 'font-bold' }}" href="{{ path('app_event') }}">Evénements</a>
+                                <a class="text-sm {{ route == 'app_event' or route == 'app_event_show' ? 'font-bold' }}" href="{{ path('app_event') }}">Evénements</a>
                             </li>
                             <li>
                                 <a class="text-sm py-2 px-4 rounded-lg font-semibold bg-gray-900 text-white hover:bg-gray-800" href="{{ path('app_event_create') }}">Créer un événement</a>
