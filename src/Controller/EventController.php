@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
+use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,12 +22,16 @@ class EventController extends AbstractController
     }
 
     #[Route('/evenements', name: 'app_event')]
-    public function index(): Response
+    public function index(EventRepository $repository): Response
     {
+        // $events = $this->events;
+        $events = $repository->findAll();
+
         return $this->render('event/index.html.twig', [
-            'events' => $this->events,
-            'incoming' => count(array_filter($this->events, function ($event) {
-                return $event['startAt'] > new \DateTime();
+            'events' => $events,
+            'incoming' => count(array_filter($events, function ($event) {
+                // return $event['startAt'] > new \DateTime();
+                return $event->getStartAt() > new \DateTime();
             })),
         ]);
     }
@@ -37,18 +43,20 @@ class EventController extends AbstractController
     }
 
     #[Route('/evenement/{id}', name: 'app_event_show')]
-    public function show($id): Response
+    public function show(Event $event): Response
     {
         // Trouve l'index qui correspond à l'id
-        $index = array_search($id, array_column($this->events, 'id'));
+        // $index = array_search($id, array_column($this->events, 'id'));
 
         // S'il n'y a pas l'id dans le tableau, 404
-        if ($index === false) {
-            throw $this->createNotFoundException();
-        }
+        // if ($index === false) {
+        //     throw $this->createNotFoundException();
+        // }
+
+        // $event = $this->events[$index];
 
         return $this->render('event/show.html.twig', [
-            'event' => $this->events[$index],
+            'event' => $event,
         ]);
     }
 
