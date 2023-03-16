@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Form\EventType;
 use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +40,11 @@ class EventController extends AbstractController
     #[Route('/evenement/nouveau', name: 'app_event_create')]
     public function create(): Response
     {
-        return $this->render('event/create.html.twig');
+        $form = $this->createForm(EventType::class);
+
+        return $this->render('event/create.html.twig', [
+            'form' => $form,
+        ]);
     }
 
     #[Route('/evenement/{id}', name: 'app_event_show')]
