@@ -31,7 +31,13 @@
                             <p class="bg-emerald-500 text-white px-3 py-1 rounded-lg text-sm">Futur</p>
                         {% endif %}
 
-                        <p class="font-bold text-xl text-right">{{ event.price | number_format(2, ',') }} €</p>
+                        <p class="font-bold text-xl text-right">
+                            {% if event.price > 0 %}
+                                {{ (event.price / 100) | number_format(2, ',') }} €
+                            {% else %}
+                                Gratuit !
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
             </a>
