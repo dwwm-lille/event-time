@@ -24,7 +24,7 @@ class Event
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\Positive]
+    #[Assert\Range(min: 10, max: 50)]
     private ?int $price = null;
 
     #[ORM\Column]
