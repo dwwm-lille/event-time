@@ -32,7 +32,10 @@ class EventController extends AbstractController
 
         return $this->render('event/index.html.twig', [
             'events' => $events,
+            // Je filtre les événements dont la date de début est supérieure à la date d'aujourd'hui
             'incoming' => count(array_filter($events, function ($event) {
+                // On peut comparer des objets datetime ensemble
+                // new \DateTime('2023-03-19') > new \DateTime('2023-03-17')
                 // return $event['startAt'] > new \DateTime();
                 return $event->getStartAt() > new \DateTime();
             })),
@@ -66,9 +69,12 @@ class EventController extends AbstractController
     public function show(Event $event): Response
     {
         // Trouve l'index qui correspond à l'id
+        // array_column($this->events, 'id') => [1, 2, 3]
+        // array_search(2, [1, 2, 3]) => Index 1
         // $index = array_search($id, array_column($this->events, 'id'));
 
         // S'il n'y a pas l'id dans le tableau, 404
+        // Attention l'index peut être 0 et il est correct dans ce cas (d'où le false)
         // if ($index === false) {
         //     throw $this->createNotFoundException();
         // }
