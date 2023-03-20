@@ -7,6 +7,7 @@ use App\Form\EventType;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -68,6 +69,19 @@ class EventController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Permet d'avoir la date de création "automatiquement"
             $event->setCreatedAt(new \DateTimeImmutable());
+
+            // Upload
+            /** @var UploadedFile $posterFile */
+            $posterFile = $form->get('posterFile')->getData();
+
+            if ($posterFile) {
+                // Upload du fichier
+                $fileName = uniqid().'.'.$posterFile->guessExtension(); // 1234.jpg
+                $posterFile->move($this->getParameter('events_upload'), $fileName);
+                // Stocker le nom du fichier dans la BDD
+                $event->setPoster($fileName);
+            }
+
             $manager->persist($event);
             $manager->flush();
 
