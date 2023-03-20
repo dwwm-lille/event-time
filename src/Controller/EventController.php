@@ -46,6 +46,7 @@ class EventController extends AbstractController
     public function create(Request $request, EntityManagerInterface $manager): Response
     {
         $event = new Event();
+        // Permet de pré-remplir les champs du formulaire
         $event->setStartAt(new \DateTimeImmutable());
         $event->setEndAt($event->getStartAt()->modify('+ 1 hour'));
 
@@ -53,6 +54,8 @@ class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Permet d'avoir la date de création "automatiquement"
+            $event->setCreatedAt(new \DateTimeImmutable());
             $manager->persist($event);
             $manager->flush();
 
