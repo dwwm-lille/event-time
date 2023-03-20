@@ -24,7 +24,7 @@ class Event
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\Range(min: 10, max: 50)]
+    #[Assert\Range(min: 1000, max: 5000, notInRangeMessage: 'Cette valeur doit être comprise entre 10 et 50.')]
     private ?int $price = null;
 
     #[ORM\Column]
