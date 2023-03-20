@@ -12,7 +12,7 @@
     </div>
 
     <div class="text-right my-6">
-        <a class="text-sm py-2 px-4 rounded-lg font-semibold bg-gray-900 text-white hover:bg-gray-800" href="#">Rejoindre l'événement</a>
+        <a class="text-sm py-2 px-4 rounded-lg font-semibold bg-gray-900 text-white hover:bg-gray-800" href="{{ path('app_event_join', { id: event.id }) }}">Rejoindre l'événement</a>
     </div>
 </div>
 {% endblock %}

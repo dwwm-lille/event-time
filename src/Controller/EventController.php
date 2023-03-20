@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends AbstractController
@@ -90,8 +92,18 @@ class EventController extends AbstractController
     }
 
     #[Route('/evenement/{id}/join', name: 'app_event_join')]
-    public function join($id): Response
+    public function join(Event $event, MailerInterface $mailer): Response
     {
-        return new Response('<body>Rejoindre '.$id.'</body>');
+        $email = (new Email())
+            ->from('admin@event-time.com')
+            ->to('admin@event-time.com', 'utilisateur@gmail.com')
+            ->subject('Une personne veut rejoindre un événement')
+            ->html('<p>Evénement: '.$event->getName().'</p>');
+
+        $mailer->send($email);
+
+        $this->addFlash('success', 'Vous êtes inscrit à '.$event->getName());
+
+        return $this->redirectToRoute('app_event');
     }
 }
