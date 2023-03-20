@@ -63,6 +63,15 @@
                 {% endfor %}
             {% endfor %}
 
+            <div class="my-3">
+                <form action="{{ path('app_event') }}" method="get">
+                    <div class="flex justify-center">
+                        <input name="q" value="{{ app.request.get('q') }}" type="text" class="border-gray-300 rounded-l-lg">
+                        <button class="text-sm py-2 px-4 rounded-r-lg font-semibold bg-gray-900 text-white hover:bg-gray-800">Rechercher</button>
+                    </div>
+                </form>
+            </div>
+
             {% block body %}{% endblock %}
         </div>
 

@@ -39,6 +39,16 @@ class EventRepository extends ServiceEntityRepository
         }
     }
 
+    public function search($query)
+    {
+        $qb = $this->createQueryBuilder('e'); // SELECT * FROM event e
+        $qb->where('e.name LIKE :query'); // WHERE name LIKE :name
+        $qb->orderBy('e.endAt', 'DESC'); // ORDER BY end_at DESC
+        $qb->setParameter('query', '%'.$query.'%'); // ->execute([])
+
+        return $qb->getQuery()->getResult(); // ->fetchAll();
+    }
+
 //    /**
 //     * @return Event[] Returns an array of Event objects
 //     */
