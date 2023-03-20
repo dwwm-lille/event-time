@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,14 +40,22 @@ class EventRepository extends ServiceEntityRepository
         }
     }
 
-    public function search($query)
+    public function search($query, $page = 1)
     {
         $qb = $this->createQueryBuilder('e'); // SELECT * FROM event e
         $qb->where('e.name LIKE :query'); // WHERE name LIKE :name
         $qb->orderBy('e.endAt', 'DESC'); // ORDER BY end_at DESC
         $qb->setParameter('query', '%'.$query.'%'); // ->execute([])
 
-        return $qb->getQuery()->getResult(); // ->fetchAll();
+        // return $qb->getQuery()->getResult(); // ->fetchAll();
+        $qb->setFirstResult(($page - 1) * 2)
+           ->setMaxResults(2); // LIMIT 0, 2;
+           // Page 1 => LIMIT 0, 2
+           // Page 2 => LIMIT 2, 2
+           // Page 3 => LIMIT 4, 2
+           // Page 4 => LIMIT 6, 2
+
+        return new Paginator($qb->getQuery());
     }
 
 //    /**

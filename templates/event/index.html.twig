@@ -43,5 +43,19 @@
             </a>
         </div>
     {% endfor %}
+
+    <div class="text-center py-6 flex gap-6 justify-center">
+        {% if page > 1 %}
+            <a href="{{ path('app_event', { page: page - 1 }) }}">Page précédente</a>
+        {% endif %}
+
+        {% for i in 1..total %}
+            <a href="{{ path('app_event', { page: i }) }}">{{ i }}</a>
+        {% endfor %}
+
+        {% if page < total %}
+            <a href="{{ path('app_event', { page: page + 1 }) }}">Page suivante</a>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

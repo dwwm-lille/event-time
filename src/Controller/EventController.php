@@ -26,22 +26,31 @@ class EventController extends AbstractController
         ];
     }
 
-    #[Route('/evenements', name: 'app_event')]
-    public function index(EventRepository $repository, Request $request): Response
+    #[Route('/evenements/{page}', name: 'app_event', requirements: ['page' => '\d+'])]
+    public function index(EventRepository $repository, Request $request, $page = 1): Response
     {
         // $events = $this->events;
         // $events = $repository->findBy([], ['endAt' => 'DESC']);
-        $events = $repository->search($request->get('q'));
+        $events = $repository->search($request->get('q'), $page);
+        $allEvents = $repository->findAll();
+        $total = ceil(count($allEvents) / 2); // 3 pages au total
+
+        // Si on dépasse le total de page, c'est une 404
+        if ($page > $total) {
+            throw $this->createNotFoundException("La page $page est inexistante.");
+        }
 
         return $this->render('event/index.html.twig', [
             'events' => $events,
             // Je filtre les événements dont la date de début est supérieure à la date d'aujourd'hui
-            'incoming' => count(array_filter($events, function ($event) {
+            'incoming' => count(array_filter($allEvents, function ($event) {
                 // On peut comparer des objets datetime ensemble
                 // new \DateTime('2023-03-19') > new \DateTime('2023-03-17')
                 // return $event['startAt'] > new \DateTime();
                 return $event->getStartAt() > new \DateTime();
             })),
+            'total' => $total,
+            'page' => $page,
         ]);
     }
 
